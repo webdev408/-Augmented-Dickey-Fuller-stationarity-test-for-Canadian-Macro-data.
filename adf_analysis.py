@@ -16,8 +16,12 @@ from statsmodels.api import OLS, add_constant
 import warnings
 warnings.filterwarnings('ignore')
 
+# Constants
+DATA_FILE = 'canadian_macro_data.csv'
+OUTPUT_PLOT_FILE = 'canadian_macro_analysis.png'
 
-def load_data(filepath='canadian_macro_data.csv'):
+
+def load_data(filepath=DATA_FILE):
     """Load the Canadian macroeconomic data."""
     df = pd.read_csv(filepath)
     return df
@@ -239,9 +243,15 @@ def create_visualizations(df):
         axes[1, i].axhline(y=0, color='r', linestyle='--', alpha=0.5)
     
     plt.tight_layout()
-    plt.savefig('canadian_macro_analysis.png', dpi=300, bbox_inches='tight')
-    print("\nVisualization saved as 'canadian_macro_analysis.png'")
-    plt.close()
+    
+    try:
+        plt.savefig(OUTPUT_PLOT_FILE, dpi=300, bbox_inches='tight')
+        print(f"\nVisualization saved as '{OUTPUT_PLOT_FILE}'")
+    except Exception as e:
+        print(f"\nError saving visualization: {e}")
+    finally:
+        plt.close()
+
 
 
 def main():
@@ -253,7 +263,7 @@ def main():
     
     # Load data
     print("\nLoading data...")
-    df = load_data('canadian_macro_data.csv')
+    df = load_data()
     print(f"Data loaded successfully. Shape: {df.shape}")
     print("\nFirst few rows:")
     print(df.head())
